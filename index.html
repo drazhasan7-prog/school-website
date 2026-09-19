@@ -57,25 +57,6 @@
             gap: 10px;
         }
 
-        .admin-btn {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .admin-btn:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-        }
-
         /* الحاوية الرئيسية */
         .container {
             max-width: 1100px;
@@ -264,79 +245,6 @@
             color: #bdc3c7;
         }
 
-        /* النافذة المنبثقة (Modal) للإدارة */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 650px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-header {
-            padding: 1.2rem 1.5rem;
-            background: var(--primary-color);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        .admin-nav {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .admin-nav-btn {
-            background: none;
-            border: none;
-            padding: 0.5rem 1rem;
-            font-weight: 700;
-            color: #7f8c8d;
-            cursor: pointer;
-        }
-
-        .admin-nav-btn.active {
-            color: var(--secondary-color);
-            border-bottom: 3px solid var(--secondary-color);
-        }
-
         .badge {
             display: inline-block;
             padding: 0.25rem 0.6rem;
@@ -346,34 +254,6 @@
         }
 
         .badge-primary { background: #e3f2fd; color: #1976d2; }
-
-        .action-btn {
-            padding: 0.3rem 0.6rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            color: white;
-            font-size: 0.85rem;
-        }
-
-        .btn-danger { background-color: var(--danger-color); }
-
-        .btn-submit {
-            width: 100%;
-            padding: 0.8rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-
-        .btn-submit:hover {
-            background: #1a252f;
-        }
     </style>
 </head>
 <body>
@@ -384,10 +264,6 @@
             <i class="fa-solid fa-graduation-cap"></i>
             منصة المدرسة - جداول الحصص والتفاعلات
         </div>
-        <button class="admin-btn" onclick="openAdminModal()">
-            <i class="fa-solid fa-user-gear"></i>
-            <span id="adminBtnText">لوحة التحكم الإدارية</span>
-        </button>
     </nav>
 
     <div class="container">
@@ -475,156 +351,15 @@
 
     </div>
 
-    <!-- النافذة المنبثقة للإدارة (Admin Control) -->
-    <div class="modal" id="adminModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle"><i class="fa-solid fa-lock"></i> تسجيل دخول الإدارة</h3>
-                <button class="close-btn" onclick="closeAdminModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                
-                <!-- نموذج تسجيل الدخول -->
-                <div id="adminLoginForm">
-                    <div class="form-group" style="margin-bottom: 1rem;">
-                        <label>البريد الإلكتروني للأدمن:</label>
-                        <input type="email" id="adminEmail" class="form-control" placeholder="@example.com">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 1rem;">
-                        <label>كلمة المرور:</label>
-                        <input type="password" id="adminPassword" class="form-control" placeholder="••••">
-                    </div>
-                    <div id="loginError" style="color: var(--danger-color); font-weight: 600; margin-bottom: 1rem; display: none;">
-                        البريد الإلكتروني أو كلمة المرور غير صحيحة!
-                    </div>
-                    <button class="btn-submit" onclick="handleAdminLogin()">تسجيل الدخول</button>
-                </div>
-
-                <!-- لوحة الإدارة بعد تسجيل الدخول -->
-                <div id="adminDashboard" style="display: none;">
-                    <div class="admin-nav">
-                        <button class="admin-nav-btn active" id="tabHessaBtn" onclick="switchAdminTab('hessa')">إضافة/تعديل الحصص</button>
-                        <button class="admin-nav-btn" id="tabAnnounceBtn" onclick="switchAdminTab('announce')">إضافة إعلان</button>
-                        <button class="action-btn btn-danger" style="margin-right: auto;" onclick="handleAdminLogout()">خروج</button>
-                    </div>
-
-                    <!-- تحديد الشعبة المراد التعديل عليها -->
-                    <div style="background: #f1f4f8; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                        <h4 style="margin-bottom: 0.8rem; color: var(--primary-color);">اختر الشعبة المراد تعديل بيانها:</h4>
-                        <div class="grid-3">
-                            <div>
-                                <label style="font-size:0.85rem; font-weight:bold;">الصف:</label>
-                                <select id="adminGrade" class="form-control" onchange="handleAdminGradeChange()">
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </select>
-                            </div>
-                            <div id="adminBranchBox" style="display:none;">
-                                <label style="font-size:0.85rem; font-weight:bold;">الفرع:</label>
-                                <select id="adminBranch" class="form-control">
-                                    <option value="scientific">علمي</option>
-                                    <option value="literary">أدبي</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label style="font-size:0.85rem; font-weight:bold;">الشعبة:</label>
-                                <select id="adminSection" class="form-control">
-                                    <option value="A">أ</option>
-                                    <option value="B">ب</option>
-                                    <option value="C">ج</option>
-                                    <option value="D">د</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- تبويب إضافة حصة -->
-                    <div id="adminHessaSection">
-                        <form id="addHessaForm" onsubmit="saveHessa(event)">
-                            <div class="grid-3" style="margin-bottom: 0.8rem;">
-                                <div class="form-group">
-                                    <label>اليوم:</label>
-                                    <select id="hessaDay" class="form-control" required>
-                                        <option value="الأحد">الأحد</option>
-                                        <option value="الإثنين">الإثنين</option>
-                                        <option value="الثلاثاء">الثلاثاء</option>
-                                        <option value="الأربعاء">الأربعاء</option>
-                                        <option value="الخميس">الخميس</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>رقم الحصة:</label>
-                                    <input type="text" id="hessaPeriod" class="form-control" placeholder="مثال: الحصة الأولى" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>التوقيت:</label>
-                                    <input type="text" id="hessaTime" class="form-control" placeholder="08:00 - 08:45" required>
-                                </div>
-                            </div>
-                            <div class="grid-3" style="margin-bottom: 0.8rem;">
-                                <div class="form-group">
-                                    <label>المادة:</label>
-                                    <input type="text" id="hessaSubject" class="form-control" placeholder="اسم المادة" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>المعلم:</label>
-                                    <input type="text" id="hessaTeacher" class="form-control" placeholder="اسم المعلم" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>رابط الحصة (Zoom/Meet/Teams):</label>
-                                    <input type="url" id="hessaLink" class="form-control" placeholder="https://..." required>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn-submit" style="background: var(--accent-color);">حفظ ونشر الحصة لشعبة المستهدفة</button>
-                        </form>
-                    </div>
-
-                    <!-- تبويب إضافة إعلان -->
-                    <div id="adminAnnounceSection" style="display: none;">
-                        <form id="addAnnounceForm" onsubmit="saveAnnouncement(event)">
-                            <div class="form-group" style="margin-bottom: 0.8rem;">
-                                <label>عنوان الإعلان:</label>
-                                <input type="text" id="announceTitle" class="form-control" placeholder="عنوان التنبيه..." required>
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0.8rem;">
-                                <label>مضمون الإعلان:</label>
-                                <textarea id="announceContent" class="form-control" rows="3" placeholder="أدخل تفاصيل الإعلان..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn-submit" style="background: var(--warning-color); color: #fff;">نشر الإعلان لشعبة المستهدفة</button>
-                        </form>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
     <!-- برمجة المنطق والبيانات (JavaScript) -->
     <script>
-        // بيانات أولية افتراضية للمعاينة
+        // لا توجد بيانات مبدئية - كل الجداول والإعلانات فارغة حتى تتم إضافتها
         const initialData = {
-            schedules: {
-                "10-none-A": [
-                    
-                ],
-                "12-scientific-A": [
-                    
-                ]
-            },
-            announcements: {
-                "10-none-A": [
-                    
-                ],
-                "11-scientific-A": [
-
-                ]
-            }
+            schedules: {},
+            announcements: {}
         };
 
         let currentSelectedDay = "الأحد";
-        let isAdminLoggedIn = false;
 
         // القراءة والحفظ في ذاكرة المتصفح LocalStorage
         function getSchoolData() {
@@ -634,10 +369,6 @@
                 return initialData;
             }
             return JSON.parse(data);
-        }
-
-        function saveSchoolData(data) {
-            localStorage.setItem("schoolData", JSON.stringify(data));
         }
 
         // إخفاء/إظهار اختيار الفرع حسب الصف Selected Grade
@@ -651,16 +382,6 @@
                 branchGroup.style.display = "block";
             }
             renderStudentDashboard();
-        }
-
-        function handleAdminGradeChange() {
-            const grade = document.getElementById("adminGrade").value;
-            const branchBox = document.getElementById("adminBranchBox");
-            if (grade === "10") {
-                branchBox.style.display = "none";
-            } else {
-                branchBox.style.display = "block";
-            }
         }
 
         // توليد مفتاح المعرف الفردي للشعبة
@@ -723,11 +444,10 @@
                 return;
             }
 
-            listContainer.innerHTML = announcements.map((item, index) => `
+            listContainer.innerHTML = announcements.map((item) => `
                 <div class="announcement-item">
                     <strong>${item.title}</strong>
                     <p style="margin-top: 0.3rem; font-size:0.95rem; color:#444;">${item.content}</p>
-                    ${isAdminLoggedIn ? `<button class="action-btn btn-danger" onclick="deleteAnnouncement('${key}',${index})" style="margin-top:5px;"><i class="fa-solid fa-trash"></i> حذف الإعلان</button>` : ''}
                 </div>
             `).join('');
         }
@@ -762,150 +482,9 @@
                         <a href="${item.link}" target="_blank" class="link-btn">
                             <i class="fa-solid fa-video"></i> دخول الحصة
                         </a>
-                        ${isAdminLoggedIn ? `<button class="action-btn btn-danger" onclick="deleteHessa('${key}', '${item.day}', '${item.period}')" style="margin-right:8px;"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
                 </tr>
             `).join('');
-        }
-
-        /* نافذة الإدارة والمصادقة */
-        function openAdminModal() {
-            document.getElementById("adminModal").classList.add("active");
-        }
-
-        function closeAdminModal() {
-            document.getElementById("adminModal").classList.remove("active");
-        }
-
-        function handleAdminLogin() {
-            const email = document.getElementById("adminEmail").value.trim();
-            const password = document.getElementById("adminPassword").value.trim();
-            const errorElement = document.getElementById("loginError");
-
-            // التحقق من حساب الأدمن المخصص
-            if (email === "drazhasan7@gmail.com" && password === "hasan2020$") {
-                isAdminLoggedIn = true;
-                errorElement.style.display = "none";
-                document.getElementById("adminLoginForm").style.display = "none";
-                document.getElementById("adminDashboard").style.display = "block";
-                document.getElementById("modalTitle").innerText = "لوحة إدارة الحصص والإعلانات";
-                document.getElementById("adminBtnText").innerText = "الإدارة (نشط)";
-                renderStudentDashboard();
-            } else {
-                errorElement.style.display = "block";
-            }
-        }
-
-        function handleAdminLogout() {
-            isAdminLoggedIn = false;
-            document.getElementById("adminLoginForm").style.display = "block";
-            document.getElementById("adminDashboard").style.display = "none";
-            document.getElementById("modalTitle").innerText = "تسجيل دخول الإدارة";
-            document.getElementById("adminBtnText").innerText = "لوحة التحكم الإدارية";
-            renderStudentDashboard();
-            closeAdminModal();
-        }
-
-        function switchAdminTab(tab) {
-            if (tab === 'hessa') {
-                document.getElementById("adminHessaSection").style.display = "block";
-                document.getElementById("adminAnnounceSection").style.display = "none";
-                document.getElementById("tabHessaBtn").classList.add("active");
-                document.getElementById("tabAnnounceBtn").classList.remove("active");
-            } else {
-                document.getElementById("adminHessaSection").style.display = "none";
-                document.getElementById("adminAnnounceSection").style.display = "block";
-                document.getElementById("tabHessaBtn").classList.remove("active");
-                document.getElementById("tabAnnounceBtn").classList.add("active");
-            }
-        }
-
-        // حفظ حصة جديدة من قبل الإدارة
-        function saveHessa(event) {
-            event.preventDefault();
-            const grade = document.getElementById("adminGrade").value;
-            const branch = document.getElementById("adminBranch").value;
-            const section = document.getElementById("adminSection").value;
-            const key = getTargetKey(grade, branch, section);
-
-            const newHessa = {
-                day: document.getElementById("hessaDay").value,
-                period: document.getElementById("hessaPeriod").value.trim(),
-                time: document.getElementById("hessaTime").value.trim(),
-                subject: document.getElementById("hessaSubject").value.trim(),
-                teacher: document.getElementById("hessaTeacher").value.trim(),
-                link: document.getElementById("hessaLink").value.trim()
-            };
-
-            const schoolData = getSchoolData();
-            if (!schoolData.schedules[key]) {
-                schoolData.schedules[key] = [];
-            }
-
-            const existingIndex = schoolData.schedules[key].findIndex(
-                item => item.day === newHessa.day && item.period === newHessa.period
-            );
-
-            if (existingIndex > -1) {
-                schoolData.schedules[key][existingIndex] = newHessa;
-            } else {
-                schoolData.schedules[key].push(newHessa);
-            }
-
-            saveSchoolData(schoolData);
-            alert("تم حفظ الحصة بنجاح لشعبة المستهدفة!");
-            document.getElementById("addHessaForm").reset();
-            renderStudentDashboard();
-        }
-
-        // حذف حصة
-        function deleteHessa(key, day, period) {
-            if (!confirm("هل أنت تأكد من حذف هذه الحصة؟")) return;
-            const schoolData = getSchoolData();
-            if (schoolData.schedules[key]) {
-                schoolData.schedules[key] = schoolData.schedules[key].filter(
-                    item => !(item.day === day && item.period === period)
-                );
-                saveSchoolData(schoolData);
-                renderStudentDashboard();
-            }
-        }
-
-        // حفظ إعلان جديد
-        function saveAnnouncement(event) {
-            event.preventDefault();
-            const grade = document.getElementById("adminGrade").value;
-            const branch = document.getElementById("adminBranch").value;
-            const section = document.getElementById("adminSection").value;
-            const key = getTargetKey(grade, branch, section);
-
-            const newAnnounce = {
-                title: document.getElementById("announceTitle").value.trim(),
-                content: document.getElementById("announceContent").value.trim()
-            };
-
-            const schoolData = getSchoolData();
-            if (!schoolData.announcements[key]) {
-                schoolData.announcements[key] = [];
-            }
-
-            schoolData.announcements[key].unshift(newAnnounce);
-            saveSchoolData(schoolData);
-
-            alert("تم نشر الإعلان بنجاح للشعبة المحددة!");
-            document.getElementById("addAnnounceForm").reset();
-            renderStudentDashboard();
-        }
-
-        // حذف إعلان
-        function deleteAnnouncement(key, index) {
-            if (!confirm("هل أنت متأكد من حذف هذا الإعلان؟")) return;
-            const schoolData = getSchoolData();
-            if (schoolData.announcements[key]) {
-                schoolData.announcements[key].splice(index, 1);
-                saveSchoolData(schoolData);
-                renderStudentDashboard();
-            }
         }
 
         // التشغيل التلقائي عند فتح الصفحة
