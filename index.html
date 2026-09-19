@@ -319,7 +319,12 @@
             <div class="class-title" id="classTitleDisplay">
                 الصف العاشر - شعبة أ
             </div>
-            <span class="badge badge-primary">جدول الدروس الأسبوعي</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span class="badge" style="background:#eafaf1; color:#1e8449;" id="lastUpdatedBadge">
+                    <i class="fa-regular fa-clock"></i> آخر تحديث: —
+                </span>
+                <span class="badge badge-primary">جدول الدروس الأسبوعي</span>
+            </div>
         </div>
 
         <!-- أزرار اختيار اليوم -->
@@ -353,22 +358,33 @@
 
     <!-- برمجة المنطق والبيانات (JavaScript) -->
     <script>
-        // لا توجد بيانات مبدئية - كل الجداول والإعلانات فارغة حتى تتم إضافتها
+        // ============================================================
+        // مصدر البيانات الموحّد: كل التعديلات (حصص، إعلانات) تُكتب هنا
+        // مباشرة بالكود. أي تحديث هون بينعكس فورًا لكل الطلاب لما تنشر
+        // نسخة محدّثة من الملف - مافي تخزين منفصل بكل متصفح.
+        // ============================================================
         const initialData = {
-            schedules: {},
-            announcements: {}
+            // تاريخ آخر تحديث للبيانات (عدّل هذا السطر مع كل تعديل)
+            lastUpdated: "لم تتم إضافة بيانات بعد",
+            schedules: {
+                // مثال:
+                // "10-none-A": [
+                //     { day: "الأحد", period: "الحصة الأولى", time: "08:00 - 08:45", subject: "الرياضيات", teacher: "أ. أحمد", link: "https://zoom.us/..." }
+                // ]
+            },
+            announcements: {
+                // مثال:
+                // "10-none-A": [
+                //     { title: "تنبيه", content: "نص الإعلان هنا" }
+                // ]
+            }
         };
 
         let currentSelectedDay = "الأحد";
 
-        // القراءة والحفظ في ذاكرة المتصفح LocalStorage
+        // البيانات مصدرها الكود مباشرة (ليس ذاكرة المتصفح)
         function getSchoolData() {
-            const data = localStorage.getItem("schoolData");
-            if (!data) {
-                localStorage.setItem("schoolData", JSON.stringify(initialData));
-                return initialData;
-            }
-            return JSON.parse(data);
+            return initialData;
         }
 
         // إخفاء/إظهار اختيار الفرع حسب الصف Selected Grade
@@ -428,6 +444,8 @@
             }
 
             document.getElementById("classTitleDisplay").innerText = titleText;
+            document.getElementById("lastUpdatedBadge").innerHTML =
+                `<i class="fa-regular fa-clock"></i> آخر تحديث: ${getSchoolData().lastUpdated}`;
             renderAnnouncements();
             renderScheduleTable();
         }
